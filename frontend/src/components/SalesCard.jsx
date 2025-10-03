@@ -1,26 +1,26 @@
 import React from "react";
-import { TrendingUp, Activity, BarChart3, PieChart, Package, Edit, Trash2 } from "lucide-react";
+import { TrendingUp, Activity, BarChart3, PieChart } from "lucide-react";
 
 const SalesCard = ({ ticker, description, material, index, onUpdate, onDelete }) => {
- 
+  // Updated colors to match DependencyCard style
   const colors = [
-    { from: 'from-orange-500/10', to: 'to-amber-500/5', border: 'border-orange-500/30', badge: 'bg-gradient-to-r from-orange-500 to-amber-500', text: 'text-orange-400' },
-    { from: 'from-red-500/10', to: 'to-rose-500/5', border: 'border-red-500/30', badge: 'bg-gradient-to-r from-red-500 to-rose-500', text: 'text-red-400' },
-    { from: 'from-green-500/10', to: 'to-emerald-500/5', border: 'border-green-500/30', badge: 'bg-gradient-to-r from-green-500 to-emerald-500', text: 'text-green-400' },
-    { from: 'from-amber-500/10', to: 'to-yellow-500/5', border: 'border-amber-500/30', badge: 'bg-gradient-to-r from-amber-500 to-yellow-500', text: 'text-amber-400' }
+    { from: 'from-gray-900', to: 'to-gray-950', border: 'border-gray-800', badge: 'bg-gray-800/30', text: 'text-gray-400' },
+    { from: 'from-gray-900', to: 'to-gray-950', border: 'border-gray-800', badge: 'bg-gray-800/30', text: 'text-gray-400' },
+    { from: 'from-gray-900', to: 'to-gray-950', border: 'border-gray-800', badge: 'bg-gray-800/30', text: 'text-gray-400' },
+    { from: 'from-gray-900', to: 'to-gray-950', border: 'border-gray-800', badge: 'bg-gray-800/30', text: 'text-gray-400' }
   ];
+
   const color = colors[index % colors.length];
 
   return (
     <div className="mb-8">
-      <div className={`bg-gradient-to-br ${color.from} ${color.to} backdrop-blur-xl rounded-xl shadow-2xl border ${color.border} overflow-hidden hover:shadow-orange-500/10 transition-all duration-300`}>
+      <div className={`bg-gradient-to-br ${color.from} ${color.to} rounded-xl shadow-2xl border ${color.border} overflow-hidden hover:border-gray-700 hover:shadow-gray-800/50 transition-all duration-300`}>
         {/* Chart Header */}
         <div className="px-6 py-4 border-b border-white/10 bg-black/20">
           <div className="flex items-center gap-3">
             <div className={`px-3 py-1 ${color.badge} text-white text-sm font-bold rounded-md shadow-lg`}>
               {ticker}
             </div>
-            <h2 className={`text-lg font-semibold ${color.text}`}>{description}</h2>
           </div>
         </div>
 
@@ -107,58 +107,6 @@ const SalesCard = ({ ticker, description, material, index, onUpdate, onDelete })
                 title={`market-sentiment-${ticker}`}
               ></iframe>
             </div>
-          </div>
-        </div>
-
-        {/* Materials Section */}
-        {material && material.length > 0 && (
-          <div className="border-t border-white/10 bg-black/10">
-            <div className="px-6 py-4">
-              <h3 className={`text-sm font-semibold ${color.text} flex items-center gap-2 mb-4`}>
-                <Package className="w-4 h-4" />
-                Related Materials ({material.length})
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {material.map((mat, idx) => (
-                  <div 
-                    key={idx}
-                    className="bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-white/10 hover:border-white/30 transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${color.badge}`}></div>
-                      <span className="text-white/90 text-sm font-medium truncate">
-                        {typeof mat === 'string' ? mat : mat.name || mat.material || 'Material'}
-                      </span>
-                    </div>
-                    {typeof mat === 'object' && mat.quantity && (
-                      <div className="mt-1 ml-4 text-xs text-white/60">
-                        Qty: {mat.quantity}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="border-t border-white/10 bg-black/20 px-6 py-4">
-          <div className="flex gap-3 justify-end">
-            <button
-              onClick={onUpdate}
-              className={`flex items-center gap-2 px-4 py-2 ${color.badge} text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg`}
-            >
-              <Edit className="w-4 h-4" />
-              Update
-            </button>
-            <button
-              onClick={onDelete}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg"
-            >
-              <Trash2 className="w-4 h-4" />
-              Delete
-            </button>
           </div>
         </div>
       </div>

@@ -5,7 +5,6 @@ import SalesCard from "./SalesCard";
 const Sales = () => {
   const [dependencies, setDependencies] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log("testing",dependencies)
   useEffect(() => {
     const fetchDeps = async () => {
       try {
