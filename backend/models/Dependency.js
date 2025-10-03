@@ -4,7 +4,6 @@ const dependencySchema = new mongoose.Schema({
   ticker: {
     type: String,
     required: true,
-    unique: true, 
   },
   description: {
     type: String,
