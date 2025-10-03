@@ -10,10 +10,10 @@ function App() {
       {/* Simple Navbar */}
       <nav style={{ padding: "10px", background: "#f2f2f2" }}>
         <Link to="/" style={{ marginRight: "10px" }}>Home</Link>
-        <Link to="/stockform">Add Dependency</Link>
+        <Link to="/stockform">Dependency</Link>
         <Link to="/sales">Sales</Link>
       </nav>
-
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/stockform" element={<Stockform />} />
