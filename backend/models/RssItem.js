@@ -48,33 +48,33 @@ const rssItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-import { Kafka } from "kafkajs";
+// import { Kafka } from "kafkajs";
 
-const kafka = new Kafka({
-  clientId: "rss-client",
-  brokers: ["localhost:9092"], // adjust if not local
-});
+// const kafka = new Kafka({
+//   clientId: "rss-client",
+//   brokers: ["localhost:9092"], // adjust if not local
+// });
 
-const producer = kafka.producer();
+// const producer = kafka.producer();
 
-await producer.connect();
+// await producer.connect();
 
-rssItemSchema.post("save", async function (doc) {
-  try {
-    await producer.send({
-      topic: "rss-items",  // create this topic in Kafka
-      messages: [
-        {
-          key: doc._id.toString(),   // optional
-          value: JSON.stringify(doc.toObject()),
-        },
-      ],
-    });
-    console.log(`Kafka message produced for RSS item: ${doc.title}`);
-  } catch (error) {
-    console.error("Error sending to Kafka:", error.message);
-  }
-});
+// rssItemSchema.post("save", async function (doc) {
+//   try {
+//     await producer.send({
+//       topic: "rss-items",  // create this topic in Kafka
+//       messages: [
+//         {
+//           key: doc._id.toString(),   // optional
+//           value: JSON.stringify(doc.toObject()),
+//         },
+//       ],
+//     });
+//     console.log(`Kafka message produced for RSS item: ${doc.title}`);
+//   } catch (error) {
+//     console.error("Error sending to Kafka:", error.message);
+//   }
+// });
 
 
 const RssItem = mongoose.model("RssItem", rssItemSchema);
