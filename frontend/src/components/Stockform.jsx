@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 const Stockform = () => {
   const [formData, setFormData] = useState({
     ticker: '',
@@ -69,19 +69,17 @@ const Stockform = () => {
       return;
     }
 
-    const submitData = {
-      ticker: formData.ticker.trim(),
-      description: formData.description.trim(),
-      dependencyMaterial: dependencyMaterialList
-    };
+
 
     try {
-      const response = await axios.post('http://localhost:5500/api/dependencies/', { 
-        body: JSON.stringify(submitData),
+      const data = await axios.post('http://localhost:5500/api/dependencies', { 
+        ticker: formData.ticker, 
+        description: formData.description, 
+        dependencyMaterial: dependencyMaterialList  
       });
 
-      if (!response.ok) throw new Error('Failed to submit data');
-      const data = await response.json();
+    //   if (!response.ok) throw new Error('Failed to submit data');
+    //   const data = await response.json();
       console.log('✅ Form submitted:', data);
 
       setFormData({ ticker: '', description: '', dependencyMaterial: '' });
@@ -126,7 +124,7 @@ const Stockform = () => {
               value={formData.ticker}
               onChange={handleInputChange}
               placeholder="e.g., AAPL, GOOGL, TSLA"
-              className={`w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${
+              className={`w-full text-black px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${
                 errors.ticker 
                   ? 'border-red-500 focus:ring-red-300' 
                   : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
@@ -149,7 +147,7 @@ const Stockform = () => {
               onChange={handleInputChange}
               placeholder="Enter detailed description of the stock..."
               rows="5"
-              className={`w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all resize-none ${
+              className={`w-full text-black px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all resize-none ${
                 errors.description 
                   ? 'border-red-500 focus:ring-red-300' 
                   : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
@@ -174,7 +172,7 @@ const Stockform = () => {
                 onChange={handleInputChange}
                 onKeyPress={(e) => e.key === 'Enter' && handleAddMaterial(e)}
                 placeholder="e.g., Steel, Copper, Lithium"
-                className={`flex-1 px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${
+                className={`flex-1 px-4 text-black py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${
                   errors.dependencyMaterial 
                     ? 'border-red-500 focus:ring-red-300' 
                     : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
@@ -234,7 +232,7 @@ const Stockform = () => {
             </button>
           </div>
         </form>
-      </div>
+      </div>    
     </div>
   );
 };
