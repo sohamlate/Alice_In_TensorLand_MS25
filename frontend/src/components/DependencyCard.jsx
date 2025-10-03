@@ -41,7 +41,7 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
   return (
     <>
       <div
-        className="relative bg-[#0a0e17] rounded-sm border border-cyan-500/20 hover:border-cyan-400/50 transition-all duration-300 overflow-hidden group"
+        className="relative bg-[#0a0e17] rounded-md border border-cyan-500/20 hover:border-cyan-400/50 transition-all duration-300 overflow-hidden group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -256,7 +256,7 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
             onClick={() => setShowReport(false)}
           />
           <div className="relative z-10 w-full max-w-3xl bg-[#0a0e17] rounded-sm shadow-2xl shadow-blue-500/10 border border-blue-500/30 max-h-[80vh] overflow-y-auto">
-            <div className="sticky top-0 bg-[#0a0e17] border-b border-blue-500/20 px-6 py-4 flex items-center justify-between z-10">
+            <div className="sticky top-0 bg-[#0a0e17] border-b border-blue-500/20 px-6 py-4 flex items-center scrollbar-hide justify-between z-10">
               <h3 className="text-lg font-mono text-blue-400 uppercase tracking-wider flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 Dependency Report
