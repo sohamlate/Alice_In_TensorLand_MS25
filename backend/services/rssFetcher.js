@@ -7,7 +7,7 @@ import RssItem from "../models/RssItem.js";
 // Config
 const CONCURRENCY = 1; // concurrent requests
 const REQUEST_TIMEOUT = 300000; // 5 minutes
-const DELAY_MS = 20000; // 5 seconds delay between requests
+const DELAY_MS = 30000; // 5 seconds delay between requests
 const limit = pLimit(CONCURRENCY);
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -30,9 +30,19 @@ const fetchFeed = async (urlObj) => {
   }
 };
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 export const fetchAndInsertRssFeeds = async () => {
   try {
-    const feedPromises = rss_feed_urls.map((feed) =>
+    const shuffledFeeds = shuffleArray([...rss_feed_urls]);
+
+    const feedPromises = shuffledFeeds.map((feed) =>
       limit(() => fetchFeed(feed))
     );
 
@@ -60,7 +70,7 @@ export const fetchAndInsertRssFeeds = async () => {
   }
 };
 
-cron.schedule("*/5 * * * *", async () => {
+cron.schedule("*/30 * * * *", async () => {
   console.log("Cron job running...");
   await fetchAndInsertRssFeeds();
 });
