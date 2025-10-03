@@ -10,10 +10,26 @@ const dependencySchema = new mongoose.Schema({
     required: true,
   },
   dependencyMaterial: {
-    type: [String], // ✅ Now it's an array of strings
+    type: [String], // Array of strings
     required: false,
   },
-   pdfUrl: { type: String },
+  pdfUrl: {
+    type: String,
+    required: false,
+  },
+
+ 
+  debtToEquity: { type: Number, required: false },
+  interestCoverage: { type: Number, required: false },
+  netProfitMargin: { type: Number, required: false },
+  ROA: { type: Number, required: false },
+  ROCE: { type: Number, required: false },
+  currentRatio: { type: Number, required: false },
+  quickRatio: { type: Number, required: false },
+  totalDebt: { type: Number, required: false },
+  totalCash: { type: Number, required: false },
+  operatingCashFlow: { type: Number, required: false },
+
 }, { timestamps: true });
 
 const Dependency = mongoose.model("Dependency", dependencySchema);

@@ -20,7 +20,8 @@
     "express-fileupload": "^1.5.2",
     "mongoose": "^8.19.0",
     "node-cron": "^4.2.1",
-    "p-limit": "^7.1.1"
+    "p-limit": "^7.1.1",
+    "yahoo-finance2": "^2.13.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

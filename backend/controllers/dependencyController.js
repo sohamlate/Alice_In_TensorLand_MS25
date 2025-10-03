@@ -1,7 +1,9 @@
 import Dependency from "../models/Dependency.js";
 import cloudinary from '../config/cloudinary.js';
 
-// Create Dependency
+
+import { fetchFinancialMetrics } from "../utils/financialMetrics.js"; // helper to fetch metrics
+
 export const createDependency = async (req, res) => {
   try {
     const { ticker, description, dependencyMaterial } = req.body;
@@ -13,7 +15,6 @@ export const createDependency = async (req, res) => {
         return res.status(400).json({ error: 'PDF must be less than 2MB' });
       }
 
-      // Upload to Cloudinary
       const uploaded = await cloudinary.uploader.upload(pdfFile.tempFilePath, {
         resource_type: 'raw', // for PDF
         folder: 'dependencies'
@@ -22,11 +23,16 @@ export const createDependency = async (req, res) => {
       pdfUrl = uploaded.secure_url;
     }
 
+  
+    const financialMetrics = await fetchFinancialMetrics(ticker);
+
+   
     const dependency = new Dependency({
       ticker,
       description,
-      dependencyMaterial: JSON.parse(dependencyMaterial), // array sent as JSON string
-      pdfUrl
+      dependencyMaterial: dependencyMaterial ? JSON.parse(dependencyMaterial) : [],
+      pdfUrl,
+      ...financialMetrics // Spread fetched metrics
     });
 
     const saved = await dependency.save();
