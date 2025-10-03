@@ -48,6 +48,19 @@ const rssItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+rssItemSchema.post("save", async function (doc) {
+  try {
+    await axios.post(
+      "https://caffeinekeyboard.app.n8n.cloud/webhook-test/webhook",
+      doc.toObject(),
+      { headers: { "Content-Type": "application/json" } }
+    );
+    console.log(`Webhook posted for RSS item: ${doc.title}`);
+  } catch (error) {
+    console.error("Error posting to webhook:", error.message);
+  }
+});
+
 const RssItem = mongoose.model("RssItem", rssItemSchema);
 
 export default RssItem;

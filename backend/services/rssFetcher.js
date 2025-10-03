@@ -7,7 +7,7 @@ import RssItem from "../models/RssItem.js";
 // Config
 const CONCURRENCY = 1; // concurrent requests
 const REQUEST_TIMEOUT = 300000; // 5 minutes
-const DELAY_MS = 10000; // 5 seconds delay between requests
+const DELAY_MS = 20000; // 5 seconds delay between requests
 const limit = pLimit(CONCURRENCY);
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -60,7 +60,7 @@ export const fetchAndInsertRssFeeds = async () => {
   }
 };
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
   console.log("Cron job running...");
   await fetchAndInsertRssFeeds();
 });
