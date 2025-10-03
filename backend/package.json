@@ -18,6 +18,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-fileupload": "^1.5.2",
+    "kafkajs": "^2.2.4",
     "mongoose": "^8.19.0",
     "node-cron": "^4.2.1",
     "p-limit": "^7.1.1",
