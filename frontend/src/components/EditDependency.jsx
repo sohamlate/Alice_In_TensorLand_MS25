@@ -9,6 +9,7 @@ const EditDependency = ({
   setNeedUpdate,
 }) => {
   const [formData, setFormData] = useState({
+    name: "",
     ticker: "",
     materials: "",
     description: "",
@@ -18,6 +19,7 @@ const EditDependency = ({
   useEffect(() => {
     if (dependency) {
       setFormData({
+        name: dependency.name || "",
         ticker: dependency.ticker || "",
         materials: dependency.dependencyMaterial?.join(", ") || "",
         description: dependency.description || "",
@@ -49,6 +51,7 @@ const EditDependency = ({
       );
 
       console.log("Dependency updated successfully:", res.data);
+      alert(`Dependency "${res.data.name || res.data.ticker}" updated successfully!`);
       setShowUpdate(false);
       setNeedUpdate(!needupdate);
     } catch (error) {
@@ -86,6 +89,25 @@ const EditDependency = ({
           onSubmit={handleSubmit}
           className="space-y-4"
         >
+          {/* Name Field */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-slate-300 font-semibold mb-1 text-sm"
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Enter dependency name"
+              className="w-full bg-slate-800/70 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
+            />
+          </div>
+
           {/* Ticker Field */}
           <div>
             <label

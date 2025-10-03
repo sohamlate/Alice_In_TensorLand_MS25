@@ -48,18 +48,34 @@ const rssItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-rssItemSchema.post("save", async function (doc) {
-  try {
-    await axios.post(
-      "https://caffeinekeyboard.app.n8n.cloud/webhook-test/webhook",
-      doc.toObject(),
-      { headers: { "Content-Type": "application/json" } }
-    );
-    console.log(`Webhook posted for RSS item: ${doc.title}`);
-  } catch (error) {
-    console.error("Error posting to webhook:", error.message);
-  }
-});
+// import { Kafka } from "kafkajs";
+
+// const kafka = new Kafka({
+//   clientId: "rss-client",
+//   brokers: ["localhost:9092"], // adjust if not local
+// });
+
+// const producer = kafka.producer();
+
+// await producer.connect();
+
+// rssItemSchema.post("save", async function (doc) {
+//   try {
+//     await producer.send({
+//       topic: "rss-items",  // create this topic in Kafka
+//       messages: [
+//         {
+//           key: doc._id.toString(),   // optional
+//           value: JSON.stringify(doc.toObject()),
+//         },
+//       ],
+//     });
+//     console.log(`Kafka message produced for RSS item: ${doc.title}`);
+//   } catch (error) {
+//     console.error("Error sending to Kafka:", error.message);
+//   }
+// });
+
 
 const RssItem = mongoose.model("RssItem", rssItemSchema);
 
