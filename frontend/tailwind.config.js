@@ -1,14 +1,13 @@
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      fontFamily:{
-         mono: ['Fira Code', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
-      }
+      fontFamily: {
+        mono: ["Fira Code", "Menlo", "Monaco", "Courier New", "monospace"],
+      },
     },
   },
-  plugins: [],
-}
+  plugins: [
+     require('tailwind-scrollbar-hide')
+  ],
+};

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const EditDependency = ({ dependency }) => {
+const EditDependency = ({
+  dependency,
+  showUpdate,
+  setShowUpdate,
+  needupdate,
+  setNeedUpdate,
+}) => {
   const [formData, setFormData] = useState({
     ticker: "",
     materials: "",
@@ -38,12 +44,13 @@ const EditDependency = ({ dependency }) => {
       };
 
       const res = await axios.put(
-        `http://localhost:5500/api/dependencies/${dependency._id}`, 
+        `http://localhost:5500/api/dependencies/${dependency._id}`,
         updatedData
       );
 
       console.log("Dependency updated successfully:", res.data);
-      alert("Dependency updated successfully!");
+      setShowUpdate(false);
+      setNeedUpdate(!needupdate);
     } catch (error) {
       console.error("Error updating dependency:", error);
       alert("Failed to update dependency.");
@@ -56,21 +63,34 @@ const EditDependency = ({ dependency }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl">
-        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 mb-8 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="relative w-full max-w-lg bg-slate-900/80 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-700 p-6 max-h-[90vh] overflow-y-auto">
+        
+        {/* Close button */}
+        <button
+          onClick={() => setShowUpdate(false)}
+          className="absolute top-4 right-4 flex items-center justify-center 
+                     w-8 h-8 bg-red-500 rounded-full text-white 
+                     shadow-lg shadow-red-900/50 
+                     text-sm font-bold 
+                     transition-transform transform hover:scale-110"
+        >
+          ✕
+        </button>
+
+        <h1 className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 mb-6">
           Edit Dependency
         </h1>
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 shadow-2xl"
+          className="space-y-4"
         >
           {/* Ticker Field */}
           <div>
             <label
               htmlFor="ticker"
-              className="block text-slate-200 font-semibold mb-2 text-sm uppercase tracking-wide"
+              className="block text-slate-300 font-semibold mb-1 text-sm"
             >
               Ticker Symbol
             </label>
@@ -81,7 +101,7 @@ const EditDependency = ({ dependency }) => {
               value={formData.ticker}
               onChange={handleChange}
               placeholder="e.g., GOOGL"
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
+              className="w-full bg-slate-800/70 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
             />
           </div>
 
@@ -89,7 +109,7 @@ const EditDependency = ({ dependency }) => {
           <div>
             <label
               htmlFor="materials"
-              className="block text-slate-200 font-semibold mb-2 text-sm uppercase tracking-wide"
+              className="block text-slate-300 font-semibold mb-1 text-sm"
             >
               Dependency Materials
             </label>
@@ -99,10 +119,10 @@ const EditDependency = ({ dependency }) => {
               name="materials"
               value={formData.materials}
               onChange={handleChange}
-              placeholder="e.g., new tech, AI, cloud computing"
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
+              placeholder="e.g., AI, cloud, steel"
+              className="w-full bg-slate-800/70 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
             />
-            <p className="text-slate-400 text-sm mt-2">
+            <p className="text-slate-500 text-xs mt-1">
               Separate multiple materials with commas
             </p>
           </div>
@@ -111,7 +131,7 @@ const EditDependency = ({ dependency }) => {
           <div>
             <label
               htmlFor="description"
-              className="block text-slate-200 font-semibold mb-2 text-sm uppercase tracking-wide"
+              className="block text-slate-300 font-semibold mb-1 text-sm"
             >
               Description
             </label>
@@ -121,16 +141,16 @@ const EditDependency = ({ dependency }) => {
               value={formData.description}
               onChange={handleChange}
               placeholder="Enter description..."
-              rows="5"
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all resize-none"
+              rows="4"
+              className="w-full bg-slate-800/70 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all resize-none"
             />
           </div>
 
           {/* Action Button */}
-          <div className="pt-4">
+          <div className="pt-2">
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold py-3 px-6 rounded-lg transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-orange-500/30"
+              className="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-semibold py-2.5 rounded-lg transition-all transform hover:scale-[1.02] active:scale-95 shadow-md shadow-orange-500/30"
             >
               Save Changes
             </button>
