@@ -6,10 +6,13 @@ import {
   updateDependency,
   deleteDependency,
 } from "../controllers/dependencyController.js";
+import fileUpload from 'express-fileupload';
 
 const router = express.Router();
 
-router.post("/", createDependency);     // Create
+router.use(fileUpload({ useTempFiles: true, tempFileDir: '/tmp/' }));
+
+router.post('/', createDependency);    // Create
 router.get("/", getDependencies);       // Read all
 router.get("/:id", getDependencyById);  // Read one
 router.put("/:id", updateDependency);   // Update

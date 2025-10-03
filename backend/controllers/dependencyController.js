@@ -1,16 +1,40 @@
 import Dependency from "../models/Dependency.js";
+import cloudinary from '../config/cloudinary.js';
 
 // Create Dependency
 export const createDependency = async (req, res) => {
   try {
     const { ticker, description, dependencyMaterial } = req.body;
+    let pdfUrl;
 
-    const dependency = new Dependency({ ticker, description, dependencyMaterial });
-    await dependency.save();
+    if (req.files && req.files.pdf) {
+      const pdfFile = req.files.pdf;
+      if (pdfFile.size > 2 * 1024 * 1024) {
+        return res.status(400).json({ error: 'PDF must be less than 2MB' });
+      }
 
-    res.status(201).json(dependency);
+      // Upload to Cloudinary
+      const uploaded = await cloudinary.uploader.upload(pdfFile.tempFilePath, {
+        resource_type: 'raw', // for PDF
+        folder: 'dependencies'
+      });
+
+      pdfUrl = uploaded.secure_url;
+    }
+
+    const dependency = new Dependency({
+      ticker,
+      description,
+      dependencyMaterial: JSON.parse(dependencyMaterial), // array sent as JSON string
+      pdfUrl
+    });
+
+    const saved = await dependency.save();
+    res.status(201).json(saved);
+
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 

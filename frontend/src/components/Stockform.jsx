@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 const Stockform = () => {
   const [formData, setFormData] = useState({
     ticker: '',
@@ -8,84 +9,86 @@ const Stockform = () => {
   });
 
   const [dependencyMaterialList, setDependencyMaterialList] = useState([]);
+  const [pdfFile, setPdfFile] = useState(null);
   const [errors, setErrors] = useState({});
+  const [pdfError, setPdfError] = useState('');
 
+  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
 
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
+  // Add dependency material
   const handleAddMaterial = (e) => {
     e.preventDefault();
     const material = formData.dependencyMaterial.trim();
-
     if (material && !dependencyMaterialList.includes(material)) {
       setDependencyMaterialList(prev => [...prev, material]);
-      setFormData(prev => ({
-        ...prev,
-        dependencyMaterial: ''
-      }));
+      setFormData(prev => ({ ...prev, dependencyMaterial: '' }));
     }
   };
 
+  // Remove dependency material
   const handleRemoveMaterial = (index) => {
     setDependencyMaterialList(prev => prev.filter((_, i) => i !== index));
   };
 
+  // Handle PDF file change
+  const handlePdfChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.size > 2 * 1024 * 1024) { // 2MB limit
+      setPdfError('PDF must be less than 2MB');
+      setPdfFile(null);
+    } else {
+      setPdfFile(file);
+      setPdfError('');
+    }
+  };
+
+  // Validate form
   const validateForm = () => {
     const newErrors = {};
-
-    if (!formData.ticker.trim()) {
-      newErrors.ticker = 'Ticker is required';
-    }
-
-    if (!formData.description.trim()) {
-      newErrors.description = 'Description is required';
-    }
-
-    if (dependencyMaterialList.length === 0) {
-      newErrors.dependencyMaterial = 'At least one dependency material is required';
-    }
-
+    if (!formData.ticker.trim()) newErrors.ticker = 'Ticker is required';
+    if (!formData.description.trim()) newErrors.description = 'Description is required';
+    if (dependencyMaterialList.length === 0) newErrors.dependencyMaterial = 'At least one dependency material is required';
     return newErrors;
   };
 
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = validateForm();
-    if (Object.keys(newErrors).length > 0) {
+    if (Object.keys(newErrors).length > 0 || pdfError) {
       setErrors(newErrors);
       return;
     }
 
-
-
     try {
-      const data = await axios.post('http://localhost:5500/api/dependencies', { 
-        ticker: formData.ticker, 
-        description: formData.description, 
-        dependencyMaterial: dependencyMaterialList  
+      const formDataToSend = new FormData();
+      formDataToSend.append('ticker', formData.ticker);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('dependencyMaterial', JSON.stringify(dependencyMaterialList));
+      if (pdfFile) formDataToSend.append('pdf', pdfFile);
+
+      const { data } = await axios.post('http://localhost:5500/api/dependencies', formDataToSend, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-    //   if (!response.ok) throw new Error('Failed to submit data');
-    //   const data = await response.json();
       console.log('✅ Form submitted:', data);
+      alert('Form submitted successfully!');
 
+      // Reset form
       setFormData({ ticker: '', description: '', dependencyMaterial: '' });
       setDependencyMaterialList([]);
+      setPdfFile(null);
       setErrors({});
-      alert('Form submitted successfully!');
+      setPdfError('');
     } catch (error) {
       console.error('❌ Error submitting form:', error);
       alert('Something went wrong while submitting');
@@ -94,13 +97,11 @@ const Stockform = () => {
 
   const handleReset = (e) => {
     e.preventDefault();
-    setFormData({
-      ticker: '',
-      description: '',
-      dependencyMaterial: ''
-    });
+    setFormData({ ticker: '', description: '', dependencyMaterial: '' });
     setDependencyMaterialList([]);
+    setPdfFile(null);
     setErrors({});
+    setPdfError('');
   };
 
   return (
@@ -108,7 +109,7 @@ const Stockform = () => {
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Stock Information Form</h1>
-          <p className="text-gray-600">Enter stock details and dependency materials</p>
+          <p className="text-gray-600">Enter stock details, dependency materials, and attach a PDF</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -125,17 +126,13 @@ const Stockform = () => {
               onChange={handleInputChange}
               placeholder="e.g., AAPL, GOOGL, TSLA"
               className={`w-full text-black px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${
-                errors.ticker 
-                  ? 'border-red-500 focus:ring-red-300' 
-                  : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
+                errors.ticker ? 'border-red-500 focus:ring-red-300' : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
               }`}
             />
-            {errors.ticker && (
-              <p className="mt-1 text-sm text-red-600">{errors.ticker}</p>
-            )}
+            {errors.ticker && <p className="mt-1 text-sm text-red-600">{errors.ticker}</p>}
           </div>
 
-          {/* Description Textarea */}
+          {/* Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-2">
               Description <span className="text-red-500">*</span>
@@ -148,17 +145,13 @@ const Stockform = () => {
               placeholder="Enter detailed description of the stock..."
               rows="5"
               className={`w-full text-black px-4 py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all resize-none ${
-                errors.description 
-                  ? 'border-red-500 focus:ring-red-300' 
-                  : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
+                errors.description ? 'border-red-500 focus:ring-red-300' : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
               }`}
             />
-            {errors.description && (
-              <p className="mt-1 text-sm text-red-600">{errors.description}</p>
-            )}
+            {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
           </div>
 
-          {/* Dependency Material Input */}
+          {/* Dependency Materials */}
           <div>
             <label htmlFor="dependencyMaterial" className="block text-sm font-semibold text-gray-700 mb-2">
               Dependency Materials <span className="text-red-500">*</span>
@@ -173,9 +166,7 @@ const Stockform = () => {
                 onKeyPress={(e) => e.key === 'Enter' && handleAddMaterial(e)}
                 placeholder="e.g., Steel, Copper, Lithium"
                 className={`flex-1 px-4 text-black py-3 rounded-lg border-2 focus:outline-none focus:ring-2 transition-all ${
-                  errors.dependencyMaterial 
-                    ? 'border-red-500 focus:ring-red-300' 
-                    : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
+                  errors.dependencyMaterial ? 'border-red-500 focus:ring-red-300' : 'border-gray-300 focus:border-purple-500 focus:ring-purple-300'
                 }`}
               />
               <button
@@ -186,18 +177,13 @@ const Stockform = () => {
                 Add
               </button>
             </div>
-            {errors.dependencyMaterial && (
-              <p className="mt-1 text-sm text-red-600">{errors.dependencyMaterial}</p>
-            )}
+            {errors.dependencyMaterial && <p className="mt-1 text-sm text-red-600">{errors.dependencyMaterial}</p>}
 
             {/* Materials List */}
             {dependencyMaterialList.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-2">
                 {dependencyMaterialList.map((material, index) => (
-                  <span
-                    key={index}
-                    className="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
-                  >
+                  <span key={index} className="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
                     {material}
                     <button
                       onClick={() => handleRemoveMaterial(index)}
@@ -213,6 +199,15 @@ const Stockform = () => {
                 ))}
               </div>
             )}
+          </div>
+
+          {/* PDF Upload */}
+          <div>
+            <label htmlFor="pdf" className="block text-sm font-semibold text-gray-700 mb-2">
+              Upload PDF (Max 2MB)
+            </label>
+            <input type="file" accept=".pdf" onChange={handlePdfChange} className="w-full"/>
+            {pdfError && <p className="mt-1 text-sm text-red-600">{pdfError}</p>}
           </div>
 
           {/* Form Actions */}
@@ -232,7 +227,7 @@ const Stockform = () => {
             </button>
           </div>
         </form>
-      </div>    
+      </div>
     </div>
   );
 };
