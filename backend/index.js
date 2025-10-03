@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import dependencyRoutes from "./routes/dependencyRoutes.js";
+import dataInjectionRoutes from "./routes/manualDataInjectionRoutes.js"
+import { fetchAndInsertRssFeeds } from "./services/rssFetcher.js";
+
 
 dotenv.config();
 
@@ -17,15 +20,21 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err) => console.error("❌ MongoDB connection error:", err));
+.then(() => console.log("MongoDB connected"))
+.catch((err) => console.error("MongoDB connection error:", err));
 
 // Routes
 app.use("/api/dependencies", dependencyRoutes);
+app.use("/api/data", dataInjectionRoutes);
+app.get("/feeds", async (req, res) => {
+  const items = await fetchAndInsertRssFeeds();
+  res.json({ items });
+});
 
 app.get("/", (req, res) => {
   res.send("MERN backend running with pnpm 🚀");
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+const server = app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+server.timeout = 10 * 60 * 1000;
