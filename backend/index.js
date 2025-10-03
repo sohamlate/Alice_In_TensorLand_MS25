@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import dependencyRoutes from "./routes/dependencyRoutes.js";
 
 dotenv.config();
 
@@ -19,7 +20,9 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("✅ MongoDB connected"))
 .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Sample route
+// Routes
+app.use("/api/dependencies", dependencyRoutes);
+
 app.get("/", (req, res) => {
   res.send("MERN backend running with pnpm 🚀");
 });
