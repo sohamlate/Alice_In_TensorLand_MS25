@@ -1,25 +1,24 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Stockform from "./components/Stockform";
-import Home from "./components/Home";
-import Sales from "./components/Sales"; 
-import Dependency from "./components/Dependency";
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import Sales from './components/Sales';
+import Dependency from './components/Dependency';
+
 function App() {
   return (
     <BrowserRouter>
-      {/* Simple Navbar */}
-      <nav style={{ padding: "10px", background: "#f2f2f2" }}>
-        <Link to="/" style={{ marginRight: "10px" }}>Home</Link>
-        <Link to="/dependency">Dependency</Link>
-        <Link to="/sales">Sales</Link>
-      </nav>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/stockform" element={<Stockform />} />
-        <Route path="/sales" element={<Sales />} />
-        <Route path="/dependency" element={<Dependency />} />
-      </Routes>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
+          <Routes>
+            <Route path="/" element={<Dependency />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/sales" element={<Sales />} />
+          </Routes>
+        </main>
+      </div>
     </BrowserRouter>
   );
 }

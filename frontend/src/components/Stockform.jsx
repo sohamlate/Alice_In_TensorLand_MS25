@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const Stockform = ({ setShowAdd, showAdd }) => {
   const [formData, setFormData] = useState({
+    name: "",
     ticker: "",
     description: "",
     dependencyMaterial: "",
@@ -52,6 +53,7 @@ const Stockform = ({ setShowAdd, showAdd }) => {
   // Validate form
   const validateForm = () => {
     const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.ticker.trim()) newErrors.ticker = "Ticker is required";
     if (!formData.description.trim())
       newErrors.description = "Description is required";
@@ -72,6 +74,7 @@ const Stockform = ({ setShowAdd, showAdd }) => {
 
     try {
       console.log("✅ Form submitted:", {
+        name: formData.name,
         ticker: formData.ticker,
         description: formData.description,
         dependencyMaterial: dependencyMaterialList,
@@ -79,7 +82,7 @@ const Stockform = ({ setShowAdd, showAdd }) => {
       });
       alert("Form submitted successfully!");
 
-      setFormData({ ticker: "", description: "", dependencyMaterial: "" });
+      setFormData({ name: "", ticker: "", description: "", dependencyMaterial: "" });
       setDependencyMaterialList([]);
       setPdfFile(null);
       setErrors({});
@@ -92,7 +95,7 @@ const Stockform = ({ setShowAdd, showAdd }) => {
 
   const handleReset = (e) => {
     e.preventDefault();
-    setFormData({ ticker: "", description: "", dependencyMaterial: "" });
+    setFormData({ name: "", ticker: "", description: "", dependencyMaterial: "" });
     setDependencyMaterialList([]);
     setPdfFile(null);
     setErrors({});
@@ -123,6 +126,32 @@ const Stockform = ({ setShowAdd, showAdd }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name Input */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-semibold text-white mb-2"
+            >
+              Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Enter dependency name"
+              className={`w-full text-white bg-gray-800 px-3 py-2 rounded-lg border-2 focus:outline-none focus:ring-2 text-sm ${
+                errors.name
+                  ? "border-red-500 focus:ring-red-300"
+                  : "border-gray-700 focus:border-emerald-500 focus:ring-emerald-300"
+              }`}
+            />
+            {errors.name && (
+              <p className="mt-1 text-xs text-red-500">{errors.name}</p>
+            )}
+          </div>
+
           {/* Ticker Input */}
           <div>
             <label
