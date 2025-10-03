@@ -71,7 +71,9 @@ export const updateDependency = async (req, res) => {
   try {
     const dependency = await Dependency.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!dependency) return res.status(404).json({ message: "Dependency not found" });
+    console.log(dependency.ticker);
     const financialMetrics = await fetchFinancialMetrics(dependency.ticker);
+    console.log(financialMetrics);
      Object.assign(dependency, req.body, financialMetrics);
     // Save updated document
     await dependency.save();

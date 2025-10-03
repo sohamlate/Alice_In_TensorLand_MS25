@@ -74,12 +74,39 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
                 </div>
               </div>
               <div
-                className={`inline-flex items-center gap-2 px-2 py-1 rounded-sm text-[10px] font-mono uppercase tracking-wider border ${getStatusColor(
+                className={`inline-flex items-center gap-2 mr-3 px-2 py-1 rounded-sm text-[10px] font-mono uppercase tracking-wider border ${getStatusColor(
                   dependency.status
                 )}`}
               >
                 <div className="w-1 h-1 rounded-full bg-current animate-pulse" />
                 {dependency.status || "LIVE"}
+              </div>
+
+
+                {/* Health */}
+              <div
+                className={`inline-flex items-center  px-2 py-1 rounded-sm text-[10px] font-mono uppercase tracking-wider border ${
+                  dependency.health === 0
+                    ? "text-red-400 border-red-500/30 bg-red-500/10"
+                    : dependency.health === 1
+                    ? "text-orange-400 border-orange-500/30 bg-orange-500/10"
+                    : dependency.health === 2
+                    ? "text-yellow-400 border-yellow-500/30 bg-yellow-500/10"
+                    : dependency.health === 3
+                    ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
+                    : "text-gray-400 border-gray-500/30 bg-gray-500/10"
+                }`}
+              >
+                <div className="w-1 h-1 rounded-full animate-pulse" />
+                {dependency.health === 0
+                  ? "High Risk"
+                  : dependency.health === 1
+                  ? "Moderate Risk"
+                  : dependency.health === 2
+                  ? "Low Risk"
+                  : dependency.health === 3
+                  ? "Safe"
+                  : "Unknown"}
               </div>
             </div>
           </div>

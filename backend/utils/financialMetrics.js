@@ -1,12 +1,20 @@
 import yahooFinance from 'yahoo-finance2';
 
-export const fetchFinancialMetrics = async (ticker) => {
+export const fetchFinancialMetrics = async (t) => {
   try {
+
+    const ticker =
+  ["TATASTEEL", "TATATECH", "TATAPOWER"].includes(t)
+    ? `${t}.NS`
+    : t;
+
+
     const data = await yahooFinance.quoteSummary(ticker, {
       modules: ['financialData', 'defaultKeyStatistics']
     });
 
     const financial = data.financialData || {};
+    console.log(financial , "financial data");
 
     return {
       // Existing metrics

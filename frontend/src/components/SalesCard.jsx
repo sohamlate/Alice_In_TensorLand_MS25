@@ -1,7 +1,7 @@
 import React from "react";
 import { TrendingUp, Activity, BarChart3, PieChart } from "lucide-react";
 
-const SalesCard = ({ ticker, description, material, index, onUpdate, onDelete }) => {
+const SalesCard = ({ ticker, health, description, material, index, onUpdate, onDelete }) => {
   // Updated colors to match DependencyCard style
   const colors = [
     { from: 'from-gray-900', to: 'to-gray-950', border: 'border-gray-800', badge: 'bg-gray-800/30', text: 'text-gray-400' },
@@ -11,6 +11,37 @@ const SalesCard = ({ ticker, description, material, index, onUpdate, onDelete })
   ];
 
   const color = colors[index % colors.length];
+
+  // Calculate rotation angle for the needle (-90 to 90 degrees)
+  const getNeedleRotation = () => {
+    const rotations = {
+      0: -75,  // High Risk
+      1: -25,  // Moderate Risk
+      2: 25,   // Low Risk
+      3: 75    // Safe
+    };
+    return rotations[health] || 0;
+  };
+
+  const getHealthColor = () => {
+    const colors = {
+      0: '#f87171',  // red
+      1: '#fb923c',  // orange
+      2: '#facc15',  // yellow
+      3: '#34d399'   // emerald
+    };
+    return colors[health] || '#9ca3af';
+  };
+
+  const getHealthLabel = () => {
+    const labels = {
+      0: 'High Risk',
+      1: 'Moderate Risk',
+      2: 'Low Risk',
+      3: 'Safe'
+    };
+    return labels[health] || 'Unknown';
+  };
 
   return (
     <div className="mb-8">
@@ -69,23 +100,164 @@ const SalesCard = ({ ticker, description, material, index, onUpdate, onDelete })
 
         {/* Technical Analysis and Market Sentiment */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-white/10 border-t border-white/10">
-          {/* Technical Analysis */}
+          {/* Supply Chain Health Meter */}
           <div className="p-4">
             <div className="mb-3">
               <h3 className={`text-sm font-semibold ${color.text} flex items-center gap-2`}>
                 <BarChart3 className="w-4 h-4" />
-                Technical Analysis
+                Supply Chain Health
               </h3>
             </div>
-            <div className="rounded-lg overflow-hidden border border-white/20 shadow-lg">
-              <iframe
-                src={`https://s.tradingview.com/embed-widget/technical-analysis/?locale=en#%7B"interval":"1m","width":"100%25","height":"300","isTransparent":false,"symbol":"${ticker}","showIntervalTabs":true,"colorTheme":"dark"%7D`}
-                width="100%"
-                height="300"
-                frameBorder="0"
-                allowFullScreen
-                title={`technical-${ticker}`}
-              ></iframe>
+
+            <div className="rounded-lg overflow-hidden border border-white/20 shadow-lg p-6 bg-gradient-to-br from-gray-900 to-gray-800">
+              {/* Semicircular Gauge */}
+              <div className="flex flex-col items-center">
+                {/* Gauge Container */}
+                <div className="relative w-full max-w-xs h-32 mb-4">
+                  {/* SVG Gauge */}
+                  <svg className="w-full h-full" viewBox="0 0 200 100">
+                    {/* Gradient Definitions */}
+                    <defs>
+                      <linearGradient id={`gaugeGradient-${ticker}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#f87171" />
+                        <stop offset="33%" stopColor="#fb923c" />
+                        <stop offset="66%" stopColor="#facc15" />
+                        <stop offset="100%" stopColor="#34d399" />
+                      </linearGradient>
+                      
+                      {/* Glow filter */}
+                      <filter id={`glow-${ticker}`}>
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                    </defs>
+
+                    {/* Background track */}
+                    <path
+                      d="M 20 90 A 80 80 0 0 1 180 90"
+                      fill="none"
+                      stroke="#374151"
+                      strokeWidth="12"
+                      strokeLinecap="round"
+                    />
+
+                    {/* Colored arc */}
+                    <path
+                      d="M 20 90 A 80 80 0 0 1 180 90"
+                      fill="none"
+                      stroke={`url(#gaugeGradient-${ticker})`}
+                      strokeWidth="12"
+                      strokeLinecap="round"
+                      filter={`url(#glow-${ticker})`}
+                    />
+
+                    {/* Tick marks */}
+                    {[0, 1, 2, 3, 4].map((i) => {
+                      const angle = -90 + (i * 45);
+                      const radians = (angle * Math.PI) / 180;
+                      const x1 = 100 + 70 * Math.cos(radians);
+                      const y1 = 90 + 70 * Math.sin(radians);
+                      const x2 = 100 + 80 * Math.cos(radians);
+                      const y2 = 90 + 80 * Math.sin(radians);
+                      
+                      return (
+                        <line
+                          key={i}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke="#6b7280"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      );
+                    })}
+
+                    {/* Needle */}
+                    <g transform={`rotate(${getNeedleRotation()}, 100, 90)`}>
+                      <line
+                        x1="100"
+                        y1="90"
+                        x2="100"
+                        y2="25"
+                        stroke={getHealthColor()}
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        filter={`url(#glow-${ticker})`}
+                        className="transition-all duration-700 ease-out"
+                      />
+                      <circle
+                        cx="100"
+                        cy="90"
+                        r="6"
+                        fill={getHealthColor()}
+                        filter={`url(#glow-${ticker})`}
+                      />
+                    </g>
+
+                    {/* Center circle */}
+                    <circle
+                      cx="100"
+                      cy="90"
+                      r="4"
+                      fill="#1f2937"
+                      stroke={getHealthColor()}
+                      strokeWidth="2"
+                    />
+                  </svg>
+
+                  {/* Labels */}
+                  <div className="absolute bottom-0 left-0 text-xs text-red-400 font-semibold">
+                    HIGH
+                  </div>
+                  <div className="absolute bottom-0 right-0 text-xs text-emerald-400 font-semibold">
+                    SAFE
+                  </div>
+                </div>
+
+                {/* Status Display */}
+                <div className="flex flex-col items-center gap-2">
+                  {/* Pulsing indicator */}
+                  <div className="relative">
+                    <div
+                      className="w-3 h-3 rounded-full animate-pulse"
+                      style={{ backgroundColor: getHealthColor() }}
+                    />
+                    <div
+                      className="absolute inset-0 w-3 h-3 rounded-full animate-ping"
+                      style={{ backgroundColor: getHealthColor(), opacity: 0.4 }}
+                    />
+                  </div>
+
+                  {/* Status text */}
+                  <div className="text-center">
+                    <div
+                      className="text-lg font-bold tracking-tight"
+                      style={{ color: getHealthColor() }}
+                    >
+                      {getHealthLabel()}
+                    </div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider mt-1">
+                      Supply Chain Status
+                    </div>
+                  </div>
+
+                  {/* Numerical score */}
+                  <div className="flex items-center gap-2 mt-2 px-3 py-1 bg-gray-800/50 rounded-full border border-white/10">
+                    <span className="text-xs text-gray-400">Score:</span>
+                    <span
+                      className="text-base font-bold font-mono"
+                      style={{ color: getHealthColor() }}
+                    >
+                      {((health + 1) * 25)}%
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
