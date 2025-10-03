@@ -12,7 +12,8 @@ const dependencySchema = new mongoose.Schema({
   dependencyMaterial: {
     type: [String], // ✅ Now it's an array of strings
     required: false,
-  }
+  },
+   pdfUrl: { type: String },
 }, { timestamps: true });
 
 const Dependency = mongoose.model("Dependency", dependencySchema);
