@@ -15,30 +15,30 @@ const SalesCard = ({ ticker, health, description, material, index, onUpdate, onD
   // Calculate rotation angle for the needle (-90 to 90 degrees)
   const getNeedleRotation = () => {
     const rotations = {
-      0: -75,  // High Risk
-      1: -25,  // Moderate Risk
-      2: 25,   // Low Risk
-      3: 75    // Safe
+      0: 75,   // Safe
+      1: 25,   // Low Risk
+      2: -25,  // Moderate Risk
+      3: -75   // High Risk
     };
     return rotations[health] || 0;
   };
 
   const getHealthColor = () => {
     const colors = {
-      0: '#f87171',  // red
-      1: '#fb923c',  // orange
-      2: '#facc15',  // yellow
-      3: '#34d399'   // emerald
+      0: '#34d399',  // emerald - Safe
+      1: '#facc15',  // yellow - Low Risk
+      2: '#fb923c',  // orange - Moderate Risk
+      3: '#f87171'   // red - High Risk
     };
     return colors[health] || '#9ca3af';
   };
 
   const getHealthLabel = () => {
     const labels = {
-      0: 'High Risk',
-      1: 'Moderate Risk',
-      2: 'Low Risk',
-      3: 'Safe'
+      0: 'Safe',
+      1: 'Low Risk',
+      2: 'Moderate Risk',
+      3: 'High Risk'
     };
     return labels[health] || 'Unknown';
   };
@@ -177,45 +177,62 @@ const SalesCard = ({ ticker, health, description, material, index, onUpdate, onD
                       );
                     })}
 
-                    {/* Needle */}
-                    <g transform={`rotate(${getNeedleRotation()}, 100, 90)`}>
+                    {/* Needle with Arrow Pointer */}
+                    <g transform={`rotate(${getNeedleRotation()}, 100, 90)`} className="transition-all duration-700 ease-out" style={{ transformOrigin: '100px 90px' }}>
+                      {/* Needle shaft */}
                       <line
                         x1="100"
                         y1="90"
                         x2="100"
-                        y2="25"
+                        y2="30"
                         stroke={getHealthColor()}
-                        strokeWidth="3"
+                        strokeWidth="4"
                         strokeLinecap="round"
                         filter={`url(#glow-${ticker})`}
-                        className="transition-all duration-700 ease-out"
                       />
-                      <circle
-                        cx="100"
-                        cy="90"
-                        r="6"
+                      
+                      {/* Arrow pointer */}
+                      <polygon
+                        points="100,20 95,32 100,28 105,32"
                         fill={getHealthColor()}
                         filter={`url(#glow-${ticker})`}
                       />
+                      
+                      {/* Needle base circle */}
+                      <circle
+                        cx="100"
+                        cy="90"
+                        r="8"
+                        fill={getHealthColor()}
+                        filter={`url(#glow-${ticker})`}
+                      />
+                      
+                      {/* Inner circle for depth */}
+                      <circle
+                        cx="100"
+                        cy="90"
+                        r="5"
+                        fill="#1f2937"
+                      />
                     </g>
 
-                    {/* Center circle */}
+                    {/* Center circle with border */}
                     <circle
                       cx="100"
                       cy="90"
-                      r="4"
+                      r="3"
                       fill="#1f2937"
                       stroke={getHealthColor()}
-                      strokeWidth="2"
+                      strokeWidth="1"
                     />
                   </svg>
 
                   {/* Labels */}
-                  <div className="absolute bottom-0 left-0 text-xs text-red-400 font-semibold">
-                    HIGH
-                  </div>
-                  <div className="absolute bottom-0 right-0 text-xs text-emerald-400 font-semibold">
+                  <div className="absolute bottom-0 left-0 text-xs text-emerald-400 font-semibold">
                     SAFE
+                  </div>
+                  <div className="absolute bottom-0 right-0 text-xs text-red-400 font-semibold">
+                    HIGH
                   </div>
                 </div>
 
@@ -253,7 +270,7 @@ const SalesCard = ({ ticker, health, description, material, index, onUpdate, onD
                       className="text-base font-bold font-mono"
                       style={{ color: getHealthColor() }}
                     >
-                      {((health + 1) * 25)}%
+                      {((3 - health + 1) * 25)}%
                     </span>
                   </div>
                 </div>

@@ -3,12 +3,15 @@ import { TrendingUp, TrendingDown, Activity, Clock, Package, CreditCard as Edit2
 import EditDependency from "./EditDependency";
 import DeleteDependency from "./DeleteDependency";
 import Reportcard from "./Reportcard";
+import { useNavigate } from "react-router-dom";
 
 const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
   const [showUpdate, setShowUpdate] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+   const navigate = useNavigate();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -39,9 +42,10 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
   };
 
   return (
-    <>
+    <div onClick={() => navigate(`/dependency/${dependency._id}`)}>
       <div
         className="relative bg-[#0a0e17] rounded-md border border-cyan-500/20 hover:border-cyan-400/50 transition-all duration-300 overflow-hidden group"
+        
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -83,29 +87,29 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
               </div>
 
 
-                {/* Health */}
+                {/* Health - Updated Logic: 0=Safe, 3=High Risk */}
               <div
                 className={`inline-flex items-center  px-2 py-1 rounded-sm text-[10px] font-mono uppercase tracking-wider border ${
                   dependency.health === 0
-                    ? "text-red-400 border-red-500/30 bg-red-500/10"
-                    : dependency.health === 1
-                    ? "text-orange-400 border-orange-500/30 bg-orange-500/10"
-                    : dependency.health === 2
-                    ? "text-yellow-400 border-yellow-500/30 bg-yellow-500/10"
-                    : dependency.health === 3
                     ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
+                    : dependency.health === 1
+                    ? "text-yellow-400 border-yellow-500/30 bg-yellow-500/10"
+                    : dependency.health === 2
+                    ? "text-orange-400 border-orange-500/30 bg-orange-500/10"
+                    : dependency.health === 3
+                    ? "text-red-400 border-red-500/30 bg-red-500/10"
                     : "text-gray-400 border-gray-500/30 bg-gray-500/10"
                 }`}
               >
                 <div className="w-1 h-1 rounded-full animate-pulse" />
                 {dependency.health === 0
-                  ? "High Risk"
-                  : dependency.health === 1
-                  ? "Moderate Risk"
-                  : dependency.health === 2
-                  ? "Low Risk"
-                  : dependency.health === 3
                   ? "Safe"
+                  : dependency.health === 1
+                  ? "Low Risk"
+                  : dependency.health === 2
+                  ? "Moderate Risk"
+                  : dependency.health === 3
+                  ? "High Risk"
                   : "Unknown"}
               </div>
             </div>
@@ -301,7 +305,7 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

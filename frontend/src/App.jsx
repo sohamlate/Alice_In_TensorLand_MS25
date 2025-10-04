@@ -4,6 +4,8 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Sales from './components/Sales';
 import Dependency from './components/Dependency';
+import DependencyNews from "./components/DependencyNews";
+// import NewsEventDetail from "./components/NewsEventDetail";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
             <Route path="/" element={<Dependency />} />
             <Route path="/home" element={<Home />} />
             <Route path="/sales" element={<Sales />} />
+            <Route path="/dependency/:id" element={<DependencyNews />} />
+            {/* <Route path="/news/:newsId" element={<NewsEventDetail />} /> */}
           </Routes>
         </main>
       </div>
