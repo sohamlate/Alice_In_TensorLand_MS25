@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const dependencySchema = new mongoose.Schema({
     
-  name: { type: String, required: true },
+  name: { type: String, required: false },
   ticker: { type: String, required: true },
-  description: { type: String, required: true },
+  description: { type: String, required: false },
   dependencyMaterial: { type: [String], required: false },
   report: { type: String, required: false },
-  health: { type: String, required: true },
+  health: { type: Number, required: false },
 
 
   pdfUrl: { type: String, required: false },

@@ -112,25 +112,25 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
 
               <div
                 className={`inline-flex items-center  px-2 py-1 rounded-sm text-[10px] font-mono uppercase tracking-wider border ${
-                  dependency.health === 0
+                  dependency.health == 0
                     ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
-                    : dependency.health === 1
+                    : dependency.health == 1
                     ? "text-yellow-400 border-yellow-500/30 bg-yellow-500/10"
-                    : dependency.health === 2
+                    : dependency.health == 2
                     ? "text-orange-400 border-orange-500/30 bg-orange-500/10"
-                    : dependency.health === 3
+                    : dependency.health == 3
                     ? "text-red-400 border-red-500/30 bg-red-500/10"
                     : "text-gray-400 border-gray-500/30 bg-gray-500/10"
                 }`}
               >
                 <div className="w-1 h-1 rounded-full animate-pulse" />
-                {dependency.health === 0
+                {dependency.health == 0
                   ? "Safe"
-                  : dependency.health === 1
+                  : dependency.health == 1
                   ? "Low Risk"
-                  : dependency.health === 2
+                  : dependency.health == 2
                   ? "Moderate Risk"
-                  : dependency.health === 3
+                  : dependency.health == 3
                   ? "High Risk"
                   : "Unknown"}
               </div>
