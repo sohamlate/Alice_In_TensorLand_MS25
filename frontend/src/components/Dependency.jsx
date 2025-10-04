@@ -26,9 +26,21 @@ const Dependency = () => {
   }, [needupdate]);
 
   // Filter dependencies based on search query
-  const filteredDependencies = dependencies.filter((dep) =>
-    dep.ticker?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter dependencies based on search query
+  const filteredDependencies = dependencies.filter((dep) => {
+    const query = searchQuery.toLowerCase();
+
+    // Convert dependencyMaterial array into a string for searching
+    const materials = Array.isArray(dep.dependencyMaterial)
+      ? dep.dependencyMaterial.join(" ").toLowerCase()
+      : (dep.dependencyMaterial || "").toLowerCase();
+
+    return (
+      dep.ticker?.toLowerCase().includes(query) ||
+      dep.description?.toLowerCase().includes(query) ||
+      materials.includes(query)
+    );
+  });
 
   if (loading) {
     return (
@@ -59,7 +71,9 @@ const Dependency = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 via-amber-400 to-red-400 bg-clip-text text-transparent">
                   Dependencies Manager
                 </h1>
-                <p className="text-sm text-gray-400">Manage your trading dependencies</p>
+                <p className="text-sm text-gray-400">
+                  Manage your trading dependencies
+                </p>
               </div>
             </div>
             <button
@@ -93,7 +107,8 @@ const Dependency = () => {
             </div>
             {searchQuery && (
               <p className="mt-2 text-sm text-gray-400">
-                Found {filteredDependencies.length} {filteredDependencies.length === 1 ? 'result' : 'results'}
+                Found {filteredDependencies.length}{" "}
+                {filteredDependencies.length === 1 ? "result" : "results"}
               </p>
             )}
           </div>
@@ -112,10 +127,14 @@ const Dependency = () => {
               )}
             </div>
             <h3 className="text-xl font-semibold text-orange-400 mb-2">
-              {searchQuery ? `No dependencies found for "${searchQuery}"` : 'No Dependencies Found'}
+              {searchQuery
+                ? `No dependencies found for "${searchQuery}"`
+                : "No Dependencies Found"}
             </h3>
             <p className="text-gray-400">
-              {searchQuery ? 'Try a different search term' : 'Add your first dependency to get started'}
+              {searchQuery
+                ? "Try a different search term"
+                : "Add your first dependency to get started"}
             </p>
           </div>
         ) : (
