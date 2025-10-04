@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from "axios";
 const Stockform = ({ setShowAdd, showAdd }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -73,29 +73,60 @@ const Stockform = ({ setShowAdd, showAdd }) => {
     }
 
     try {
-      console.log("✅ Form submitted:", {
-        name: formData.name,
-        ticker: formData.ticker,
-        description: formData.description,
-        dependencyMaterial: dependencyMaterialList,
-        pdf: pdfFile?.name,
-      });
+      // Create FormData for multipart/form-data
+      const formPayload = new FormData();
+      formPayload.append("Name", formData.name);
+      formPayload.append("ticker", formData.ticker);
+      formPayload.append("description", formData.description);
+      formPayload.append(
+        "dependencyMaterial",
+        JSON.stringify(dependencyMaterialList)
+      );
+      if (pdfFile) {
+        formPayload.append("pdf", pdfFile);
+      }
+
+      const response = await axios.post(
+        "http://localhost:5500/api/dependencies/",
+        formPayload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("✅ Form submitted successfully:", response.data);
       alert("Form submitted successfully!");
 
-      setFormData({ name: "", ticker: "", description: "", dependencyMaterial: "" });
+      // Reset form
+      setFormData({
+        name: "",
+        ticker: "",
+        description: "",
+        dependencyMaterial: "",
+      });
       setDependencyMaterialList([]);
       setPdfFile(null);
       setErrors({});
       setPdfError("");
+      setShowAdd(false); // Close modal if needed
     } catch (error) {
-      console.error("❌ Error submitting form:", error);
-      alert("Something went wrong while submitting");
+      console.error("❌ Error submitting form:", error.response || error);
+      alert(
+        error.response?.data?.error || "Something went wrong while submitting"
+      );
     }
   };
 
   const handleReset = (e) => {
     e.preventDefault();
-    setFormData({ name: "", ticker: "", description: "", dependencyMaterial: "" });
+    setFormData({
+      name: "",
+      ticker: "",
+      description: "",
+      dependencyMaterial: "",
+    });
     setDependencyMaterialList([]);
     setPdfFile(null);
     setErrors({});
@@ -105,7 +136,6 @@ const Stockform = ({ setShowAdd, showAdd }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
       <div className="relative w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] bg-gray-900 rounded-2xl shadow-2xl border border-gray-800 p-6 max-h-[85vh] overflow-y-auto">
-        
         {/* Close Button */}
         <button
           onClick={() => setShowAdd(!showAdd)}
@@ -200,9 +230,7 @@ const Stockform = ({ setShowAdd, showAdd }) => {
               }`}
             />
             {errors.description && (
-              <p className="mt-1 text-xs text-red-500">
-                {errors.description}
-              </p>
+              <p className="mt-1 text-xs text-red-500">{errors.description}</p>
             )}
           </div>
 

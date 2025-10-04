@@ -6,7 +6,7 @@ import { fetchFinancialMetrics } from "../utils/financialMetrics.js"; // helper 
 
 export const createDependency = async (req, res) => {
   try {
-    const { ticker, description, dependencyMaterial } = req.body;
+    const {Name, ticker, description, dependencyMaterial } = req.body;
     let pdfUrl;
 
     if (req.files && req.files.pdf) {
@@ -28,6 +28,7 @@ export const createDependency = async (req, res) => {
 
    
     const dependency = new Dependency({
+      Name,
       ticker,
       description,
       dependencyMaterial: dependencyMaterial ? JSON.parse(dependencyMaterial) : [],
