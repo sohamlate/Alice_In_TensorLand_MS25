@@ -265,7 +265,7 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
       {showDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
-            className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md"
             onClick={() => setShowDelete(false)}
           />
           <div className="relative z-10 w-full max-w-md bg-[#0a0e17] rounded-sm shadow-2xl shadow-red-500/10 border border-red-500/30">
