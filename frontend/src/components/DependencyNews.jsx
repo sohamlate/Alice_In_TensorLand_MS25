@@ -63,6 +63,26 @@ const DependencyNews = () => {
     );
   }
 
+  const getSeverityColor = (severity) => {
+    if (severity >= 8) return "text-red-500";
+    if (severity >= 5) return "text-orange-500";
+    if (severity >= 3) return "text-amber-400";
+    return "text-green-500";
+  };
+
+  if (loading)
+    return (
+      <div className="bg-black min-h-screen flex items-center justify-center">
+        <p className="text-amber-400 text-xl font-mono">Loading...</p>
+      </div>
+    );
+  if (!dependency)
+    return (
+      <div className="bg-black min-h-screen flex items-center justify-center">
+        <p className="text-red-500 text-xl font-mono">Dependency not found</p>
+      </div>
+    );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       {/* Header */}

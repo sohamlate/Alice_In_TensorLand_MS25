@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 
 const NewsEventDetail = ({ dependencies }) => {
   const { newsId } = useParams();
-
+  console.log("check" , dependencies);
   // Find the event containing this news
   const event = dependencies
     .flatMap(d => d.events)

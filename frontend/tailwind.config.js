@@ -4,6 +4,7 @@ export default {
     extend: {
       fontFamily: {
         mono: ["Fira Code", "Menlo", "Monaco", "Courier New", "monospace"],
+        poppins: ["Poppins", "sans-serif"],
       },
     },
   },

@@ -156,7 +156,6 @@ const Sales = () => {
             <SalesCard
               key={dep._id}
               ticker={dep.ticker}
-              health={dep.health}
               description={dep.description}
               material={dep.dependencyMaterial}
               index={index}
