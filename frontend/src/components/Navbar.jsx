@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
-import { Package, GitBranch, TrendingUp, Bell, Settings, User, LogIn } from "lucide-react";
+import {
+  Package,
+  GitBranch,
+  TrendingUp,
+  Bell,
+  Settings,
+  User,
+  LogIn,
+} from "lucide-react";
 import TataLogo from "../assets/tata-logo.jpg"; // Make sure to place the logo in this path
 
 const Navbar = () => {
@@ -19,8 +27,12 @@ const Navbar = () => {
                 />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white tracking-tight">TATA MOTORS</div>
-                <div className="text-xs text-gray-300 font-medium tracking-wide">Supply Chain Management</div>
+                <div className="text-2xl font-bold text-white tracking-tight">
+                  TATA MOTORS
+                </div>
+                <div className="text-xs text-gray-300 font-medium tracking-wide">
+                  Supply Chain Management
+                </div>
               </div>
             </div>
 
@@ -39,6 +51,12 @@ const Navbar = () => {
               >
                 <TrendingUp className="h-4 w-4 mr-2" />
                 Analytics
+              </Link>
+              <Link
+                to="/news"
+                className="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
+              >
+                News
               </Link>
             </div>
           </div>

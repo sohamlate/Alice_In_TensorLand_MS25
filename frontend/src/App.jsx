@@ -6,7 +6,7 @@ import Sales from './components/Sales';
 import Dependency from './components/Dependency';
 import DependencyNews from "./components/DependencyNews";
 // import NewsEventDetail from "./components/NewsEventDetail";
-
+import NewsFeed from './components/NewsFeed';
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +19,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/dependency/:id" element={<DependencyNews />} />
+            <Route path='/news' element={<NewsFeed/>} />
             {/* <Route path="/news/:newsId" element={<NewsEventDetail />} /> */}
           </Routes>
         </main>
