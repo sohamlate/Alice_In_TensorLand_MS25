@@ -6,6 +6,7 @@ import dependencyRoutes from "./routes/dependencyRoutes.js";
 import dataInjectionRoutes from "./routes/manualDataInjectionRoutes.js"
 import { fetchAndInsertRssFeeds } from "./services/rssFetcher.js";
 import eventRoutes from "./routes/eventRoutes.js";
+import news from "./routes/news.js";
 
 
 dotenv.config();
@@ -28,6 +29,7 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use("/api/dependencies", dependencyRoutes);
 app.use("/api/data", dataInjectionRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/news", news);
 app.get("/feeds", async (req, res) => {
   const items = await fetchAndInsertRssFeeds();
   res.json({ items });
