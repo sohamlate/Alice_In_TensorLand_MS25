@@ -173,13 +173,13 @@ const DependencyNews = () => {
 
             {/* Modal Content */}
             <div className="overflow-y-auto max-h-[calc(90vh-120px)] px-8 py-6">
-              {selectedEvent.news.description && (
+              {/* {selectedEvent.news.description && (
                 <div className="mb-6">
                   <p className="text-gray-300 leading-relaxed">
                     {selectedEvent.news.description}
                   </p>
                 </div>
-              )}
+              )} */}
 
               {selectedEvent.news.content && (
                 <div className="mb-8">
