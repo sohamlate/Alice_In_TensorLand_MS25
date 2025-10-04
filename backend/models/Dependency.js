@@ -7,6 +7,7 @@ const dependencySchema = new mongoose.Schema({
   description: { type: String, required: true },
   dependencyMaterial: { type: [String], required: false },
   report: { type: String, required: false },
+  health: { type: String, required: true },
 
 
   pdfUrl: { type: String, required: false },
