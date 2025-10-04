@@ -25,10 +25,10 @@ const SalesCard = ({ ticker, health, description, material, index, onUpdate, onD
 
   const getHealthColor = () => {
     const colors = {
-      0: '#34d399',  // emerald - Safe
-      1: '#facc15',  // yellow - Low Risk
-      2: '#fb923c',  // orange - Moderate Risk
-      3: '#f87171'   // red - High Risk
+      "0": '#34d399',  // emerald - Safe
+      "1": '#facc15',  // yellow - Low Risk
+      "2": '#fb923c',  // orange - Moderate Risk
+      "3": '#f87171'   // red - High Risk
     };
     return colors[health] || '#9ca3af';
   };

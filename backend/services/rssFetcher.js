@@ -70,7 +70,7 @@ export const fetchAndInsertRssFeeds = async () => {
   }
 };
 
-cron.schedule("*/30 * * * *", async () => {
-  console.log("Cron job running...");
-  await fetchAndInsertRssFeeds();
-});
+// cron.schedule("*/30 * * * *", async () => {
+//   console.log("Cron job running...");
+//   await fetchAndInsertRssFeeds();
+// });
