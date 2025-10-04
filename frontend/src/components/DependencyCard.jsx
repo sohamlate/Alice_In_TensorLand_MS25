@@ -11,7 +11,7 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
   const [showReport, setShowReport] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -41,11 +41,35 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
     return text.length <= length ? text : text.slice(0, length) + "...";
   };
 
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    setShowUpdate(true);
+  };
+
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    setShowDelete(true);
+  };
+
+  const handleReportClick = (e) => {
+    e.stopPropagation();
+    setShowReport(true);
+  };
+
+  const handleModalClose = (e, closeFn) => {
+    e.stopPropagation();
+    closeFn(false);
+  };
+
+  const handleOverlayClick = (e, closeFn) => {
+    e.stopPropagation();
+    closeFn(false);
+  };
+
   return (
     <div onClick={() => navigate(`/dependency/${dependency._id}`)}>
       <div
-        className="relative bg-[#0a0e17] rounded-md border border-cyan-500/20 hover:border-cyan-400/50 transition-all duration-300 overflow-hidden group"
-        
+        className="relative bg-[#0a0e17] rounded-md border border-cyan-500/20 hover:border-cyan-400/50 transition-all duration-300 overflow-hidden group cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -86,8 +110,6 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
                 {dependency.status || "LIVE"}
               </div>
 
-
-                {/* Health - Updated Logic: 0=Safe, 3=High Risk */}
               <div
                 className={`inline-flex items-center  px-2 py-1 rounded-sm text-[10px] font-mono uppercase tracking-wider border ${
                   dependency.health === 0
@@ -192,7 +214,7 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
                   {truncateText(dependency.report, 80)}{" "}
                   {dependency.report.length > 80 && (
                     <button
-                      onClick={() => setShowReport(true)}
+                      onClick={handleReportClick}
                       className="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors font-mono"
                     >
                       View Full Report
@@ -206,7 +228,7 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
 
           <div className="flex gap-2 mt-5 pt-4 border-t border-cyan-500/10">
             <button
-              onClick={() => setShowUpdate(true)}
+              onClick={handleEditClick}
               className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-cyan-600/20 to-blue-600/20 hover:from-cyan-600/30 hover:to-blue-600/30 text-cyan-400 font-mono text-xs uppercase tracking-wider py-2.5 px-4 rounded-sm transition-all duration-200 border border-cyan-500/30 hover:border-cyan-400/50"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/0 via-cyan-400/10 to-cyan-400/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
@@ -216,7 +238,7 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
               </span>
             </button>
             <button
-              onClick={() => setShowDelete(true)}
+              onClick={handleDeleteClick}
               className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-red-600/20 to-orange-600/20 hover:from-red-600/30 hover:to-orange-600/30 text-red-400 font-mono text-xs uppercase tracking-wider py-2.5 px-4 rounded-sm transition-all duration-200 border border-red-500/30 hover:border-red-400/50"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-red-400/0 via-red-400/10 to-red-400/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
@@ -232,18 +254,17 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
       </div>
 
       {showUpdate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={(e) => handleOverlayClick(e, setShowUpdate)}>
           <div
             className="absolute inset-0 bg-black/90 backdrop-blur-md"
-            onClick={() => setShowUpdate(false)}
           />
-          <div className="relative z-10 w-full max-w-3xl bg-[#0a0e17] rounded-sm shadow-2xl shadow-cyan-500/10 border border-cyan-500/30 max-h-[80vh] overflow-y-auto">
+          <div className="relative z-10 w-full max-w-3xl bg-[#0a0e17] rounded-sm shadow-2xl shadow-cyan-500/10 border border-cyan-500/30 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="sticky top-0 bg-[#0a0e17] border-b border-cyan-500/20 px-6 py-4 flex items-center justify-between z-10">
               <h3 className="text-lg font-mono text-cyan-400 uppercase tracking-wider">
                 Edit Dependency
               </h3>
               <button
-                onClick={() => setShowUpdate(false)}
+                onClick={(e) => handleModalClose(e, setShowUpdate)}
                 className="bg-gray-800 hover:bg-gray-700 rounded-sm p-2 text-gray-400 hover:text-white transition-all duration-200"
               >
                 <span className="text-lg">✕</span>
@@ -263,12 +284,11 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
       )}
 
       {showDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={(e) => handleOverlayClick(e, setShowDelete)}>
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            onClick={() => setShowDelete(false)}
           />
-          <div className="relative z-10 w-full max-w-md bg-[#0a0e17] rounded-sm shadow-2xl shadow-red-500/10 border border-red-500/30">
+          <div className="relative z-10 w-full max-w-md bg-[#0a0e17] rounded-sm shadow-2xl shadow-red-500/10 border border-red-500/30" onClick={(e) => e.stopPropagation()}>
             <DeleteDependency
               dependency={dependency}
               showDelete={showDelete}
@@ -281,19 +301,18 @@ const DependencyCard = ({ dependency, needupdate, setNeedUpdate }) => {
       )}
 
       {showReport && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={(e) => handleOverlayClick(e, setShowReport)}>
           <div
             className="absolute inset-0 bg-black/90 backdrop-blur-md"
-            onClick={() => setShowReport(false)}
           />
-          <div className="relative z-10 w-full max-w-3xl bg-[#0a0e17] rounded-sm shadow-2xl shadow-blue-500/10 border border-blue-500/30 max-h-[80vh] overflow-y-auto">
+          <div className="relative z-10 w-full max-w-3xl bg-[#0a0e17] rounded-sm shadow-2xl shadow-blue-500/10 border border-blue-500/30 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="sticky top-0 bg-[#0a0e17] border-b border-blue-500/20 px-6 py-4 flex items-center scrollbar-hide justify-between z-10">
               <h3 className="text-lg font-mono text-blue-400 uppercase tracking-wider flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 Dependency Report
               </h3>
               <button
-                onClick={() => setShowReport(false)}
+                onClick={(e) => handleModalClose(e, setShowReport)}
                 className="bg-gray-800 hover:bg-gray-700 rounded-sm p-2 text-gray-400 hover:text-white transition-all duration-200"
               >
                 <span className="text-lg">✕</span>
