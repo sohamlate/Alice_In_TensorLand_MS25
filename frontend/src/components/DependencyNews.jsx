@@ -35,6 +35,8 @@ const DependencyNews = () => {
           const news = event.news;
           const isSelected = selectedNewsId === news._id;
 
+        //   {console.log(event)}
+
           return (
             <li key={news._id} className="border rounded p-4 shadow-sm">
               {/* News title */}
