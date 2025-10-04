@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import { TiTick } from "react-icons/ti";
+import { ImCross } from "react-icons/im";
 
 const DeleteDependency = ({
   dependency,
@@ -28,7 +30,7 @@ const DeleteDependency = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center text-center space-y-6">
+    <div className="flex flex-col items-center justify-center text-center space-y-6 p-3">
       <h2 className="text-lg font-semibold text-gray-200">
         Are you sure you want to delete{" "}
         <span className="text-red-400">{dependency.ticker}</span>?
@@ -38,19 +40,19 @@ const DeleteDependency = ({
         {/* Confirm (Green check) */}
         <button
           onClick={handleDelete}
-          className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg shadow-green-900/50 transition-transform transform hover:scale-110"
+          className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg shadow-green-900/50 transition-transform transform hover:scale-110 flex items-center justify-center"
           title="Confirm Delete"
         >
-          ✅
+          <TiTick size={24} />
         </button>
 
         {/* Cancel (Red cross) */}
         <button
           onClick={() => setShowDelete(false)}
-          className="bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg shadow-red-900/50 transition-transform transform hover:scale-110"
+          className="bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg shadow-red-900/50 transition-transform transform hover:scale-110 flex items-center justify-center"
           title="Cancel"
         >
-          ❌
+          <ImCross size={20} />
         </button>
       </div>
     </div>
