@@ -1,7 +1,7 @@
 import React from "react";
 import { TrendingUp, Activity, BarChart3, PieChart } from "lucide-react";
 
-const SalesCard = ({ ticker, health, description, material, index, onUpdate, onDelete }) => {
+const SalesCard = ({ ticker, health, description, material, index}) => {
   // Updated colors to match DependencyCard style
   const colors = [
     { from: 'from-gray-900', to: 'to-gray-950', border: 'border-gray-800', badge: 'bg-gray-800/30', text: 'text-gray-400' },

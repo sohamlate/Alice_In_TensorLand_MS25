@@ -109,7 +109,12 @@ const handleSubmit = async (e) => {
 
   const handleReset = (e) => {
     e.preventDefault();
-    setFormData({ name: "", ticker: "", description: "", dependencyMaterial: "" });
+    setFormData({
+      name: "",
+      ticker: "",
+      description: "",
+      dependencyMaterial: "",
+    });
     setDependencyMaterialList([]);
     setPdfFile(null);
     setErrors({});
