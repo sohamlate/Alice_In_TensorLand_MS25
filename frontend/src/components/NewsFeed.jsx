@@ -9,7 +9,7 @@ const NewsFeed = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await axios.get("http://localhost:5500/api/news");
+        const res = await axios.get("https://alice-in-tensorland-ms25.onrender.com/api/news");
         console.log("Fetched news:", res);
 
         if (res.data && Array.isArray(res.data)) {

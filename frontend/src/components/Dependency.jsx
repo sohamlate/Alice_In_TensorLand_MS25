@@ -13,7 +13,7 @@ const Dependency = () => {
   useEffect(() => {
     const fetchDeps = async () => {
       try {
-        const res = await fetch("http://localhost:5500/api/dependencies/");
+        const res = await fetch("https://alice-in-tensorland-ms25.onrender.com/api/dependencies/");
         const data = await res.json();
         setDependencies(data);
       } catch (err) {
@@ -71,9 +71,9 @@ const Dependency = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 via-amber-400 to-red-400 bg-clip-text text-transparent">
                   Dependencies Manager
                 </h1>
-                <p className="text-sm text-gray-400">
+                {/* <p className="text-sm text-gray-400">
                   Manage your trading dependencies
-                </p>
+                </p> */}
               </div>
             </div>
             <button

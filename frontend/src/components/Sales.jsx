@@ -10,7 +10,7 @@ const Sales = () => {
   useEffect(() => {
     const fetchDeps = async () => {
       try {
-        const res = await fetch("http://localhost:5500/api/dependencies/");
+        const res = await fetch("https://alice-in-tensorland-ms25.onrender.com/api/dependencies/");
         const data = await res.json();
         setDependencies(data);
       } catch (err) {
@@ -156,7 +156,9 @@ const Sales = () => {
             <SalesCard
               key={dep._id}
               ticker={dep.ticker}
+              health = {dep.health}
               description={dep.description}
+
               material={dep.dependencyMaterial}
               index={index}
             />

@@ -82,7 +82,7 @@ const handleSubmit = async (e) => {
 
     // Send POST request
      const response = await axios.post(
-      "http://localhost:5500/api/dependencies/",
+      "https://alice-in-tensorland-ms25.onrender.com/api/dependencies/",
       payload // Axios converts this to JSON automatically
     );
 

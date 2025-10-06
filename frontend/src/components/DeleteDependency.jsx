@@ -13,7 +13,7 @@ const DeleteDependency = ({
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://localhost:5500/api/dependencies/${dependency._id}`
+        `https://alice-in-tensorland-ms25.onrender.com/api/dependencies/${dependency._id}`
       );
 
       // Call parent delete handler if provided

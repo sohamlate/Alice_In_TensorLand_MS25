@@ -12,7 +12,7 @@ const DependencyNews = () => {
   useEffect(() => {
     const fetchDependency = async () => {
       try {
-        const res = await axios.get(`http://localhost:5500/api/events/${id}`);
+        const res = await axios.get(`https://alice-in-tensorland-ms25.onrender.com/api/events/${id}`);
         setDependency(res.data);
       } catch (err) {
         console.error(err);

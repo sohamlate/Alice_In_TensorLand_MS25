@@ -46,7 +46,7 @@ const EditDependency = ({
       };
 
       const res = await axios.put(
-        `http://localhost:5500/api/dependencies/${dependency._id}`,
+        `https://alice-in-tensorland-ms25.onrender.com/api/dependencies/${dependency._id}`,
         updatedData
       );
 
